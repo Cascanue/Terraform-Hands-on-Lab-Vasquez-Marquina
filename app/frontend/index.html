@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Laboratorio de aprovisionamiento — Frontend</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 60px auto; background: #f4f4f4; color: #222; }
+    h1   { font-size: 1.3rem; border-bottom: 2px solid #333; padding-bottom: 8px; }
+    .card { background: #fff; border-radius: 8px; padding: 16px 20px; margin: 16px 0; box-shadow: 0 2px 6px rgba(0,0,0,.1); }
+    .label { font-weight: bold; color: #555; margin-bottom: 4px; }
+    .value { font-size: 1.1rem; }
+    .ok  { color: #2a7a2a; }
+    .err { color: #b00; }
+  </style>
+</head>
+<body>
+  <h1>Laboratorio de aprovisionamiento &mdash; Frontend</h1>
+
+  <div class="card">
+    <div class="label">API &mdash; informacion del servicio</div>
+    <div class="value" id="api-info">Cargando...</div>
+  </div>
+
+  <div class="card">
+    <div class="label">BD &mdash; estado de la conexion</div>
+    <div class="value" id="db-info">Cargando...</div>
+  </div>
+
+  <script>
+    const backendURL = location.protocol + "//" + location.hostname + ":" + (Number(location.port) + 1);
+
+    fetch(backendURL + "/")
+      .then(r => r.json())
+      .then(d => {
+        document.getElementById("api-info").className = "value ok";
+        document.getElementById("api-info").textContent =
+          "Ambiente: " + d.ambiente + " | Instancia: " + d.instancia;
+      })
+      .catch(e => {
+        document.getElementById("api-info").className = "value err";
+        document.getElementById("api-info").textContent = "Error al contactar la API: " + e.message;
+      });
+
+    fetch(backendURL + "/db")
+      .then(r => r.json())
+      .then(d => {
+        const el = document.getElementById("db-info");
+        if (d.bd === "conectado") {
+          el.className = "value ok";
+          el.textContent = "Conectado a " + d.host;
+        } else {
+          el.className = "value err";
+          el.textContent = "Sin conexion: " + d.error;
+        }
+      })
+      .catch(e => {
+        document.getElementById("db-info").className = "value err";
+        document.getElementById("db-info").textContent = "Error al contactar la API: " + e.message;
+      });
+  </script>
+</body>
+</html>
