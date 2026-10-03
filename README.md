@@ -1,4 +1,4 @@
-﻿# Laboratorio de aprovisionamiento
+﻿# Laboratorio de IAC
 
 Laboratorio enfocado en utilizar Terraform con buenas practicas para aprovisionar, con Docker, un frontend (nginx), un backend (node) y una base de datos (PostgreSQL) en los ambientes dev y qa. Todo gestionado mediante workspaces de Terraform.
 
